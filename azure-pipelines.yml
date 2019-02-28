@@ -14,10 +14,11 @@ variables:
   imageName: 'furconz:$(build.buildId)'
 
 steps:
-- displayName: 'docker build'
-  script: |
+- script: |
     docker build -f Dockerfile -t $(dockerId)/$(imageName) .
-- displayName: 'docker push'
-  script: |
+  displayName: 'docker build'
+  workingDirectory: FurCoNZ
+- script: |
     docker login -u $(dockerHubId) -p $(dockerHubPassword)
     docker push $(dockerId)/$(imageName)
+  displayName: 'docker push'

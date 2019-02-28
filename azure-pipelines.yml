@@ -10,8 +10,14 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'nzfurs/furconz:$(build.buildId)'
+  dockerId: nzfurs
+  imageName: 'furconz:$(build.buildId)'
 
 steps:
-- script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'docker build'
+- displayName: 'docker build'
+  script: |
+    docker build -f Dockerfile -t $(dockerId)/$(imageName) .
+- displayName: 'docker push'
+  script: |
+    docker login -u $(dockerHubId) -p $(dockerHubPassword)
+    docker push $(dockerId)/$(imageName)

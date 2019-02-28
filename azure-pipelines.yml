@@ -15,9 +15,8 @@ variables:
 
 steps:
 - script: |
-    docker build -f Dockerfile -t $(dockerId)/$(imageName) .
+    docker build -f FurCoNZ/Dockerfile -t $(dockerId)/$(imageName) .
   displayName: 'docker build'
-  workingDirectory: FurCoNZ
 - script: |
     docker login -u $(dockerHubId) -p $(dockerHubPassword)
     docker push $(dockerId)/$(imageName)

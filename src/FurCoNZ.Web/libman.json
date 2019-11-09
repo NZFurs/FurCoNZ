@@ -47,6 +47,10 @@
         "themes/dark.css"
       ],
       "destination": "wwwroot/lib/flatpickr/"
+    },
+    {
+      "library": "fancybox@3.5.7",
+      "destination": "wwwroot/lib/fancybox/"
     }
   ]
 }

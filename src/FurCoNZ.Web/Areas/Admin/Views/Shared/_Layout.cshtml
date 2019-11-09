@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FurCoNZ</title>
 
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.css" />
 
-    <!-- flatpickr - a lightweight and powerful datetime picker -->
-    <link rel="stylesheet" href="~/lib/flatpickr/flatpickr.css" />
-    <link rel="stylesheet" href="~/lib/flatpickr/themes/dark.css" />
+        <!-- flatpickr - a lightweight and powerful datetime picker -->
+        <link rel="stylesheet" href="~/lib/flatpickr/flatpickr.css" />
+        <link rel="stylesheet" href="~/lib/flatpickr/themes/dark.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+        <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" integrity="sha384-VK/ia2DWrvtO05YDcbWI8WE3WciOH0RhfPNuRJGSa3dpAs5szXWQuCnPNv/yzpO4" />
+
+        <!-- flatpickr - a lightweight and powerful datetime picker -->
+        <link rel="stylesheet" href="~/lib/flatpickr/flatpickr.min.css" integrity="sha384-kFOVy8VwOx8Hfs1KxGdQFnFfWoSiJ8lULYUkIEt+N/zfwYebtapxcZ+kHNSuajva" />
+        <link rel="stylesheet" href="~/lib/flatpickr/themes/dark.css" integrity="sha384-FI62Pmq43XtIdjkWxezcq6x4VrIknMaHBFORbWAQafzuWmJmKH2iq53rZvbl7U8q" />
+    </environment>
 </head>
 <body>
     <header>
@@ -54,6 +65,7 @@
 
     <environment include="Development">
         <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jqueryui/jquery-ui.js"></script>
         <script src="~/lib/jquery-validate/jquery.validate.js"></script>
         <script src="~/lib/jquery-validate/additional-methods.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

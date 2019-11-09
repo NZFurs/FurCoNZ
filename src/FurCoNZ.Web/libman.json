@@ -11,6 +11,16 @@
       "destination": "wwwroot/lib/jquery/"
     },
     {
+      "library": "jqueryui@1.12.1",
+      "files": [
+        "jquery-ui.css",
+        "jquery-ui.min.css",
+        "jquery-ui.js",
+        "jquery-ui.min.js"
+      ],
+      "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
       "library": "jquery-validate@1.19.1",
       "files": [
         "jquery.validate.min.js",

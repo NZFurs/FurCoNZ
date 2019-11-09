@@ -16,5 +16,7 @@ namespace FurCoNZ.Web.Services
         Task CreateUserAsync(User user, CancellationToken cancellationToken = default);
 
         Task UpdateUserAsync(User user, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<User>> FindUsersAsync(User terms, CancellationToken cancellationToken = default);
     }
 }

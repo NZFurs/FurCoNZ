@@ -22,17 +22,20 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
         private readonly IOrderService _orderService;
         private readonly IPaymentService _paymentService;
         private readonly IEmailService _emailService;
+        private readonly IUserService _userService;
 
-        public OrdersController(IOrderService orderService, IPaymentService paymentService, IEmailService emailService)
+        public OrdersController(IOrderService orderService, IPaymentService paymentService, IEmailService emailService, IUserService userService)
         {
             _orderService = orderService;
             _paymentService = paymentService;
             _emailService = emailService;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index(int id = 0)
         {
-            if(id != 0)
+            // Return just the request order if an id is present.
+            if (id != 0)
             {
                 var order = await _orderService.GetOrderById(id, HttpContext.RequestAborted);
                 if (order == null)
@@ -40,12 +43,75 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
                 return View("Order", new OrderViewModel(order));
             }
 
+            // For creating a new order, fetch available ticket types.
+            var availableTicketTypes = await _orderService.GetTicketTypesAsync(includeUnavailableTickets:true, includeHiddenTickets: true, cancellationToken: HttpContext.RequestAborted);
+
             var orders = await _orderService.GetAllOrdersAsync(HttpContext.RequestAborted);
+
             return View(new OrdersViewModel
             {
+                NewOrder = new NewOrderViewModel
+                {
+                    AvailableTicketTypes = availableTicketTypes.Select(a => new KeyValuePair<int, OrderTicketTypeViewModel>
+                    (
+                        a.Id,
+                        new OrderTicketTypeViewModel
+                        {
+                            Name = a.Name,
+                            Description = a.Description,
+                            PriceCents = a.PriceCents,
+                            TotalAvailable = a.TotalAvailable,
+                            QuantityOrdered = 0, // default to zero tickets
+                    }
+                    )).ToDictionary(a => a.Key, a => a.Value)
+                },
                 Orders = orders.Select(o => new OrderViewModel(o)).AsEnumerable(),
                 ReceivedPayment = new ReceivedPayment()
             });
+        }
+
+        public async Task<IActionResult> LookupUserByEmail(string term)
+        {
+            var result = await _userService.FindUsersAsync(new User { Email = term }, cancellationToken: HttpContext.RequestAborted);
+            
+            return new JsonResult(result.Select(u => new { 
+                label = u.Email, 
+                value = u.Id 
+            }));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(NewOrderViewModel newOrderViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var viewModel = new List<TicketDetailViewModel>();
+                var ticketTypes = await _orderService.GetTicketTypesAsync(true, true, HttpContext.RequestAborted);
+
+                var ticketIndex = 0;
+                foreach (var ticketTypeOrdered in newOrderViewModel.AvailableTicketTypes.Where(x => x.Value.QuantityOrdered > 0))
+                {
+                    var ticketTypeId = ticketTypeOrdered.Key;
+                    var quantityOrderedForTicketType = ticketTypeOrdered.Value.QuantityOrdered;
+
+                    for (var i = 0; i < quantityOrderedForTicketType; i++)
+                    {
+                        var ticketType = ticketTypes.FirstOrDefault(x => x.Id == ticketTypeId);
+                        viewModel.Add(new TicketDetailViewModel
+                        {
+                            Id = ++ticketIndex,
+                            TicketType = ticketType != null
+                                ? new TicketTypeViewModel(ticketType)
+                                : null,
+                        });
+                    }
+                }
+
+                return View("~/Views/Order/TicketDetail.cshtml", viewModel);
+            }
+
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Payments()

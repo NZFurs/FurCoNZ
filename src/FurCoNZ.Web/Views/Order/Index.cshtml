@@ -33,7 +33,7 @@ else
                         {
                             <tr>
                                 <th scope="row">@ticketType.Value.Name</th>
-                                <td>$@((ticketType.Value.PriceCents / 100).ToString("f2"))</td>
+                                <td>@((ticketType.Value.PriceCents / 100).ToString("C"))</td>
                                 <td>@ticketType.Value.TotalAvailable remaining</td>
                                 <td>
                                     <input class="form-control" asp-for="AvailableTicketTypes[ticketType.Key].QuantityOrdered" min="0" max="@ticketType.Value.TotalAvailable" />

@@ -1,0 +1,54 @@
+﻿@model NewOrderViewModel
+@{
+    ViewData["Title"] = "Order Tickets";
+}
+
+<form id="newOrderForm" class="form" asp-action="Index" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Type</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Purchase</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticketType in Model.AvailableTicketTypes)
+            {
+                <tr>
+                    <td>@ticketType.Value.Name</td>
+                    <td>$@((ticketType.Value.PriceCents / 100).ToString("f2"))</td>
+                    <td>@ticketType.Value.TotalAvailable remaining</td>
+                    <td>
+                        <input class="form-control" asp-for="AvailableTicketTypes[ticketType.Key].QuantityOrdered" min="0" max="@ticketType.Value.TotalAvailable" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <label for="orderUserEmailLookup">User Email</label>
+    <input class="form-control" type="text" id="orderUserEmailLookup" />
+    <input type="hidden" asp-for="UserId" id="orderUserId" required />
+    <button type="submit" class="btn btn-primary float-md-right">Details &gt;</button>
+</form>
+
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded',
+        function () {
+            $("#orderUserEmailLookup").autocomplete({
+                source: "@(Url.Action("LookupUserByEmail"))",
+                appendTo: "#newOrderForm",
+                change: function (event, ui) {
+                    console.log(ui.item);
+                    //if (ui.item === null) {
+                    //    $("#orderUserId").val(0);
+                    //}
+                },
+                select: function (event, ui) {
+                    $("#orderUserId").val(ui.item.value);
+                    ui.item.value = ui.item.label;
+                }
+            });
+        });
+</script>

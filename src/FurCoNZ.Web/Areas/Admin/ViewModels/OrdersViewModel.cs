@@ -9,6 +9,8 @@ namespace FurCoNZ.Web.Areas.Admin.ViewModels
 {
     public class OrdersViewModel
     {
+        public NewOrderViewModel NewOrder { get; set; }
+
         public IEnumerable<OrderViewModel> Orders { get; set; }
 
         public ReceivedPayment ReceivedPayment { get; set; }

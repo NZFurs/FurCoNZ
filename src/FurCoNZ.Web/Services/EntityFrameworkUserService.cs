@@ -80,5 +80,20 @@ namespace FurCoNZ.Web.Services
         {
             return await _dbContext.Users.ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<User>> FindUsersAsync(User terms, CancellationToken cancellationToken = default)
+        {
+            IQueryable<User> users = _dbContext.Users;
+            if (!string.IsNullOrWhiteSpace(terms.Email))
+            {
+                users = users.Where(u => u.Email.Contains(terms.Email));
+            }
+            if (!string.IsNullOrWhiteSpace(terms.Name))
+            {
+                users = users.Where(u => u.Name.Contains(terms.Name));
+            }
+
+            return await users.ToListAsync(cancellationToken);
+        }
     }
 }

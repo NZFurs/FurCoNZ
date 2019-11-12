@@ -220,11 +220,12 @@ namespace FurCoNZ.Web
                 options.ClientId = Configuration.GetValue<string>("Auth:ClientId");
                 options.ClientSecret = Configuration.GetValue<string>("Auth:ClientSecret");
 
-                options.ResponseType = "code id_token";
+                options.ResponseType = "code";
 
                 options.Scope.Clear();
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.Scope.Add("email");
 
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;

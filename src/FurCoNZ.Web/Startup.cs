@@ -220,11 +220,12 @@ namespace FurCoNZ.Web
                 options.ClientId = Configuration.GetValue<string>("Auth:ClientId");
                 options.ClientSecret = Configuration.GetValue<string>("Auth:ClientSecret");
 
-                options.ResponseType = "code id_token";
+                options.ResponseType = "code";
 
                 options.Scope.Clear();
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.Scope.Add("email");
 
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
@@ -301,7 +302,7 @@ namespace FurCoNZ.Web
                     .FontSources(f => f.CustomSources("https://fonts.gstatic.com"))
                     .FrameAncestors(f => f.Self())
                     .ImageSources(i => i.Self())
-                    .ImageSources(i => i.CustomSources("data:", "photos.furco.nz"))
+                    .ImageSources(i => i.CustomSources("data:", "photos.furco.nz", "furconz.blob.core.windows.net"))
                     .ManifestSources(m => m.None())
                     .MediaSources(m => m.Self())
                     .ObjectSources(o => o.None())

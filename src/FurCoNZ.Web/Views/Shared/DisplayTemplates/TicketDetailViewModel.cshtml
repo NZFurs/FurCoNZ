@@ -22,6 +22,13 @@
         </div>
         }
 
+        @if (Model.TermsAndConditions != TermsAndConditions.Accepted)
+        {
+        <div class="alert alert-danger" role="alert">
+            The person you are buying a ticket for must read and agree to the <a asp-controller="Home" asp-action="Terms" target="_blank">FurCoNZ 2020 terms and conditions</a>. If attendee refuses to agree to Terms and Conditions during on-site Registration, then Registration will be refused and no refund will be given.
+        </div>
+        }
+
         <div id="attendee-@Model.Id-detail" aria-labelledby="attendee-@Model.Id-header">
             <div class="card-body">
                 <h5 class="card-title">@Model.TicketType.Name</h5>
@@ -60,6 +67,11 @@
                     {
                         <dt class="col-lg-3">@Html.DisplayNameFor(x => x.OtherNotes)</dt>
                         <dd class="col-lg-9">@Html.DisplayFor(x => x.OtherNotes)</dd>
+                    }
+                    @if (Model.TermsAndConditions != TermsAndConditions.Accepted)
+                    {
+                        <dt class="col-lg-3">@Html.DisplayNameFor(x => x.TermsAndConditions)</dt>
+                        <dd class="col-lg-9 text-danger">Not read or accepted yet.</dd>
                     }
                 </dl>
             </div>

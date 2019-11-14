@@ -38,6 +38,8 @@ namespace FurCoNZ.Web.Models
         public CabinActivityType CabinNoisePreference { get; set; }
 
         public string AdditionalNotes { get; set; }
+
+        public bool AcceptedTermsAndConditions { get; set; }
     }
 
     /// <summary>

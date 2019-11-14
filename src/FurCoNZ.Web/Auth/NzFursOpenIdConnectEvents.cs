@@ -29,7 +29,7 @@ namespace FurCoNZ.Web.Auth
             {
                 user = new User
                 {
-                    Name = context.User.Value<string>("name"),
+                    Name = context.User.Value<string>("nickname"),
                     Email = context.User.Value<string>("email"),
                 };
                 user.LinkedAccounts = new List<LinkedAccount>

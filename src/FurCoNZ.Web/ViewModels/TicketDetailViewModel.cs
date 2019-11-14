@@ -53,7 +53,8 @@ namespace FurCoNZ.Web.ViewModels
         [Display(Name = "Other Notes")]
         public string OtherNotes { get; set; }
 
-        public bool AcceptToS { get; set; }
+        [Display(Name = "Terms and Conditions")]
+        public TermsAndConditions TermsAndConditions { get; set; }
 
         [Display(Name = "Dietary Requirements")]
         public IEnumerable<FoodMenu> DietryRequirements { get; set; } = new List<FoodMenu>();
@@ -62,9 +63,9 @@ namespace FurCoNZ.Web.ViewModels
         {
             var validationErrors = new List<ValidationResult>();
 
-            if (!AcceptToS)
+            if (TermsAndConditions == TermsAndConditions.NotAccepted)
             {
-                validationErrors.Add(new ValidationResult("Ticket Holder must accept the Terms and Conditions before the order can be placed.", new List<string> { nameof(AcceptToS) }));
+                validationErrors.Add(new ValidationResult("Ticket Holder must accept the Terms and Conditions before the order can be placed.", new List<string> { nameof(TermsAndConditions) }));
             }
 
             return validationErrors;
@@ -106,7 +107,24 @@ namespace FurCoNZ.Web.ViewModels
             CabinPreferences = ticket.CabinGrouping;
 
             OtherNotes = ticket.AdditionalNotes;
+
+            TermsAndConditions = ticket.AcceptedTermsAndConditions 
+                ? TermsAndConditions.Accepted 
+                : TermsAndConditions.NotAccepted;
         }
+    }
+
+    public enum TermsAndConditions
+    {
+        [Display(Name = "I do not accept.")]
+        NotAccepted = 0,
+        [Display(Name = "I (the ticket holder) accept the terms and conditions.")]
+        Accepted = 1,
+        /// <summary>
+        /// Allow the Terms to be agreed upon at a later time when the purchaser is unable to get the ticket holder to read the terms immediately.
+        /// </summary>
+        [Display(Name = "The ticket holder is unavailable right now to read and accept the terms and conditions.")]
+        Deferred = 2,
     }
 
     /// <summary>

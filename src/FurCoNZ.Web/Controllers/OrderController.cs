@@ -178,6 +178,9 @@ namespace FurCoNZ.Web.Controllers
                 CabinGrouping = ticketViewModel.CabinPreferences,
 
                 AdditionalNotes = ticketViewModel.OtherNotes,
+
+                // The either the ticket holder has accepts the terms and condtions, or it is deferred to the ticket holder to accept at a later time (when paid for by another).
+                AcceptedTermsAndConditions = ticketViewModel.TermsAndConditions == TermsAndConditions.Accepted,
             };
         }
     }

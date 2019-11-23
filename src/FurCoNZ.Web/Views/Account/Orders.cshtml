@@ -36,11 +36,12 @@
                     <th scope="row" class="text-right">Total</th>
                     <th>@order.AmountTotal.ToString("C")</th>
                 </tr>
-                <tr>
+                @* TODO: Only display this if GST is enabled. *@
+                @*<tr>
                     <td>&nbsp;</td>
                     <th scope="row" class="text-right">GST (included)</th>
                     <th>@((order.AmountTotal * 3 / 23).ToString("C"))</th>
-                </tr>
+                </tr>*@
                 <tr>
                     <td>&nbsp;</td>
                     <th scope="row" class="text-right">Amount Paid</th>

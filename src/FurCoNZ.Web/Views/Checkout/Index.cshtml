@@ -24,11 +24,12 @@
         </tr>
     }
     <tfoot>
-        <tr>
+        @* TODO: Only display this if GST is enabled *@
+        @*<tr>
             <td>&nbsp;</td>
             <th class="text-right">GST (Included):</th>
             <th>@((Model.Order.AmountTotal * 3 / 23).ToString("C"))</th>
-        </tr>
+        </tr>*@
         <tr>
             <td>&nbsp;</td>
             <th class="text-right">Total:</th>

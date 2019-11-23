@@ -98,10 +98,11 @@
                     <th style="width: auto; text-align: right; padding-right: 8px; white-space: nowrap;" align="right">Total:</th>
                     <td style="width: 99%;" width="99%"><b>@Model.AmountTotal.ToString("C")</b></td>
                 </tr>
-                <tr>
+                @* TODO: only display this if GST is enabled *@
+                @*<tr>
                     <th style="width: auto; text-align: right; padding-right: 8px; white-space: nowrap;" align="right">GST (included):</th>
                     <td style="width: 99%;" width="99%"><b>@((Model.AmountTotal * 3 / 23).ToString("C"))</b></td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td colspan="2" style="width: 99%;" width="99%">
                         <hr style="border-color: #fff; border-width: 1px;" />

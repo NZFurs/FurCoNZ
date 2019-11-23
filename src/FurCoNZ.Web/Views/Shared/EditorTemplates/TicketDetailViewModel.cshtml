@@ -61,8 +61,8 @@
                 <label asp-for="DateOfBirth">Date of Birth</label>
                 @* The altFormat and altInput attributes inform flatpickr to display an alternative <input> to the user with the yyyy-mm-dd date format *@
                 @* TODO: Use a flatpickr specific tag helper to clean up the date of birth input setup *@
-                <input asp-for="DateOfBirth" class="form-control order-dob-field" placeholder="yyyy-mm-dd" data-date-format="d/m/Y" data-default-date="@Model.DateOfBirth.ToString("dd/MM/yyyy")" data-min-date="02-01-1903" data-max-date="@DateTime.Today.ToString("dd/MM/yyyy")" data-order-id="@Model.Id" />
-                <small class="form-text text-muted">Please enter this as "yyyy-mm-dd". That way, it's less ambiguous for our international visitors!</small>
+                <input asp-for="DateOfBirth" class="form-control order-dob-field" placeholder="dd-mm-yyy" data-alt-format="d-m-Y" data-date-format="d/m/Y" data-default-date="@Model.DateOfBirth.ToString("dd/MM/yyyy")" data-min-date="02-01-1903" data-max-date="@DateTime.Today.ToString("dd/MM/yyyy")" data-order-id="@Model.Id" />
+                <small class="form-text text-muted">Please enter this as "dd-mm-yyyy". This must be the date of birth that appears on your identification.</small>
                 @Html.ValidationMessageFor(m => m.DateOfBirth, null, new { @class = "invalid-feedback" }, "div")
             </div>
 

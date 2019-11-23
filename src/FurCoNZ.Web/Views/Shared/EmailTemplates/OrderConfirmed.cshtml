@@ -47,6 +47,12 @@
                             <td colspan="2" style="background-color: #f80; padding: 10px 25px"> <strong>The ticket holder must be accompanied by a parent or legal guardian.</strong> </td>
                         </tr>
                     }
+                    @if (ticket.TermsAndConditions != TermsAndConditions.Accepted)
+                    {
+                        <tr>
+                            <td colspan="2" style="background-color: #c00; padding: 10px 25px"> <strong>The person you are buying a ticket for must read and agree to the <a href="@($"{Context.Request.Scheme}://{Context.Request.Host}/Home/Terms")" target="_blank">FurCoNZ 2020 terms and conditions</a>. If attendee refuses to agree to Terms and Conditions during on-site Registration, then Registration will be refused and no refund will be given.</strong> </td>
+                        </tr>
+                    }
                     <tr>
                         <td colspan="2" style="width: 99%;" width="99%">
                             <h4 style="font-size: 20px; font-family: 'Limelight'; color: #FFF; margin: 10px 0;">@ticket.TicketType.Name</h4>

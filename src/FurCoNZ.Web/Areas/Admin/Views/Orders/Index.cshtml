@@ -19,6 +19,9 @@
                 Order ID
             </th>
             <th>
+                Order Ref
+            </th>
+            <th>
                 Ordered By
             </th>
             <th>
@@ -43,6 +46,9 @@
         <tr>
             <td>
                     @Html.DisplayFor(_ => item.Id)
+            </td>
+            <td>
+                    @($"{item.Id}{FurCoNZ.Web.Helpers.DammAlgorithm.GetCheck(item.Id)}")
             </td>
             <td>
                     @Html.DisplayFor(_ => item.OrderedBy.Name) &lt;@Html.DisplayFor(_ => item.OrderedBy.Email)&gt;

@@ -55,12 +55,6 @@ namespace FurCoNZ.Web.Services
 
         public async Task SendOrderConfirmationAsync(Order order, CancellationToken cancellationToken = default)
         {
-            // Generate email to send to purchasing account
-            var toAddresses = new MailAddressCollection
-            {
-                new MailAddress(order.OrderedBy.Email, order.OrderedBy.Name),
-            };
-
             // Prepare template
             var message = await _viewRenderService.RenderToStringAsync("EmailTemplates/OrderConfirmed", new OrderViewModel(order), cancellationToken: cancellationToken);
 
@@ -84,18 +78,35 @@ namespace FurCoNZ.Web.Services
                 attachments.Add(consentForm);
             }
 
-            // Send message
-            await _emailProvider.SendEmailAsync(toAddresses, subject, message.Output, attachments: attachments, cancellationToken: cancellationToken);
-        }
-
-        public async Task SendOrderPaidAsync(Order order, CancellationToken cancellationToken = default)
-        {
+            var sendTasks = new List<Task>();
+            
             // Generate email to send to purchasing account
             var toAddresses = new MailAddressCollection
             {
                 new MailAddress(order.OrderedBy.Email, order.OrderedBy.Name),
             };
 
+            // Send message
+            sendTasks.Add(_emailProvider.SendEmailAsync(toAddresses, subject, message.Output, attachments: attachments, cancellationToken: cancellationToken));
+
+            foreach(var ticket in order.TicketsPurchased)
+            {
+                if (ticket.EmailAddress.Equals(order.OrderedBy.Email, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                // Generate email to send to purchasing account
+                toAddresses = new MailAddressCollection
+                {
+                    new MailAddress(ticket.EmailAddress, ticket.PreferredName),
+                };
+
+                // Send message
+                sendTasks.Add(_emailProvider.SendEmailAsync(toAddresses, subject, message.Output, attachments: attachments, cancellationToken: cancellationToken));
+            }
+        }
+
+        public async Task SendOrderPaidAsync(Order order, CancellationToken cancellationToken = default)
+        {
             // Prepare template
             var message = await _viewRenderService.RenderToStringAsync("EmailTemplates/OrderPaid", new OrderViewModel(order), cancellationToken: cancellationToken);
 
@@ -119,8 +130,31 @@ namespace FurCoNZ.Web.Services
                 attachments.Add(consentForm);
             }
 
+            var sendTasks = new List<Task>();
+
+            // Generate email to send to purchasing account
+            var toAddresses = new MailAddressCollection
+            {
+                new MailAddress(order.OrderedBy.Email, order.OrderedBy.Name),
+            };
             // Send message
-            await _emailProvider.SendEmailAsync(toAddresses, subject, message.Output, attachments: attachments, cancellationToken: cancellationToken);
+            sendTasks.Add(_emailProvider.SendEmailAsync(toAddresses, subject, message.Output, attachments: attachments, cancellationToken: cancellationToken));
+
+            foreach(var ticket in order.TicketsPurchased)
+            {
+                if (ticket.EmailAddress.Equals(order.OrderedBy.Email, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                // Generate email to send to purchasing account
+                toAddresses = new MailAddressCollection
+                {
+                    new MailAddress(ticket.EmailAddress, ticket.PreferredName),
+                };
+
+                sendTasks.Add(_emailProvider.SendEmailAsync(toAddresses, subject, message.Output, attachments: attachments, cancellationToken: cancellationToken));
+            }
+
+            await Task.WhenAll(sendTasks.ToArray());
         }
 
         public async Task SendPaymentReceivedAsync(Order order, CancellationToken cancellationToken)

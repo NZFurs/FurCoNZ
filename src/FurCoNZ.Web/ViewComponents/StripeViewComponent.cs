@@ -43,6 +43,9 @@ namespace FurCoNZ.Web.Components
 
         public async Task<IViewComponentResult> InvokeAsync(int orderId)
         {
+            if (string.IsNullOrWhiteSpace(_stripeOptions.Value.SecretKey))
+                return View();
+
             var user = await _userService.GetCurrentUserAsync(HttpContext.RequestAborted);
             if (user == null)
                 return View(); // Default view displays nothing to the end user.

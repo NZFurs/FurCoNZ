@@ -51,6 +51,19 @@
     {
       "library": "fancybox@3.5.7",
       "destination": "wwwroot/lib/fancybox/"
+    },
+    {
+      "library": "font-awesome@5.11.2",
+      "files": [
+        "css/solid.css",
+        "css/solid.min.css",
+        "webfonts/fa-solid-900.eot",
+        "webfonts/fa-solid-900.svg",
+        "webfonts/fa-solid-900.ttf",
+        "webfonts/fa-solid-900.woff",
+        "webfonts/fa-solid-900.woff2"
+      ],
+      "destination": "wwwroot/lib/font-awesome/"
     }
   ]
 }

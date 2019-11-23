@@ -50,7 +50,10 @@ namespace FurCoNZ.Web.Controllers
             return View();
         }
 
-
+        public IActionResult AboutVenue()
+        {
+            return View();
+        }
         public IActionResult FAQ()
         {
             return View();

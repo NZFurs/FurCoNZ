@@ -13,6 +13,9 @@
     <!-- fancybox - JavaScript lightbox library for presenting various types of media. -->
     <link rel="stylesheet" href="~/lib/fancybox/jquery.fancybox.css" />
 
+<!-- Font Awesome 5 Free -->
+    <link rel="stylesheet" href="~/lib/font-awesome/css/solid.css" />
+
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
@@ -48,6 +51,7 @@
                                 <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="About" asp-active-controllers="Home" asp-active-actions="About">About FurCoNZ</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="FAQ" asp-active-controllers="Home" asp-active-actions="FAQ">FurCoNZ 2020 FAQ</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Tickets" asp-active-controllers="Home" asp-active-actions="Tickets">Ticket Information</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AboutVenue" asp-active-controllers="Home" asp-active-actions="AboutVenue">About Our Venue</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Terms" asp-active-controllers="Home" asp-active-actions="Terms">Attendee Terms & Conditions</a>
                             </div>
                         </li>
@@ -66,6 +70,8 @@
                             <a class="nav-link text-dark" asp-area="admin" asp-controller="Home" asp-action="Index">Admin</a>
                         </li>
                     </ul>
+                    @* For now, hide the login nav buttons on the production site (yes, i know you can read this, yes i know you can jsut navigate manually. shhhh 🤫 *@
+                    <environment include="Development">
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -98,6 +104,7 @@
                             </li>
                         }
                     </ul>
+                    </environment>
                 </div>
             </div> 
         </nav>

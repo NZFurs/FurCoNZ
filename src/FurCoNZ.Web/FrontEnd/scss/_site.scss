@@ -148,3 +148,16 @@ h2 {
     position: absolute;
     left: -5000px;
 }
+
+.accordion .card-header:after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f078";
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.accordion .card-header.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\f053";
+}

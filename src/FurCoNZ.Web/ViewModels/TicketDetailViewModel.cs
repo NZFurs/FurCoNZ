@@ -19,6 +19,7 @@ namespace FurCoNZ.Web.ViewModels
         [Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
 
+        [Required]
         [Display(Name = "Badge Name", Description = "This is the name displayed on your badge. This is typically your \"furry name\" or some other alias.")]
         public string BadgeName { get; set; }
 
@@ -27,6 +28,7 @@ namespace FurCoNZ.Web.ViewModels
         // * FurcoNZ Staff, where necessary (such as registration)
         // * NZ officials, when legally required
         // * Where required for safety reasons (such as medical emergencies)
+        [Required]
         [Display(Name = "Full Name (as it appears on your offical identification)")]
         public string IdentificationFullName { get; set; }
 

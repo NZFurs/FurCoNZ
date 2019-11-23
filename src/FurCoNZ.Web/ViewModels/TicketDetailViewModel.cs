@@ -134,7 +134,7 @@ namespace FurCoNZ.Web.ViewModels
     {
         Regular = 0,
         Vegetarian = 1,
-        Vegan = 2,
+        //Vegan = 2,
         DairyFree = 4,
         GlutenFree = 8
     }

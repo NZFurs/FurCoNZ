@@ -12,6 +12,8 @@ using FurCoNZ.Web.Models;
 using FurCoNZ.Web.Services;
 using FurCoNZ.Web.Services.Payment;
 using FurCoNZ.Web.ViewModels;
+using System.IO;
+using CsvHelper;
 
 namespace FurCoNZ.Web.Areas.Admin.Controllers
 {
@@ -46,6 +48,26 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
                 Orders = orders.Select(o => new OrderViewModel(o)).AsEnumerable(),
                 ReceivedPayment = new ReceivedPayment()
             });
+        }
+
+        public async Task<IActionResult> Download()
+        {
+            var orders = await _orderService.GetAllOrdersAsync(HttpContext.RequestAborted);
+
+            var stream = new MemoryStream();
+            
+            using (var writer = new StreamWriter(stream, System.Text.Encoding.UTF8, 1024, leaveOpen: true))
+            {
+                using (var csvWriter = new CsvWriter(writer, leaveOpen: true))
+                {
+                    csvWriter.WriteRecords(orders);
+                }
+            }
+
+            // Reset memory stream to beginning
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return File(stream, "application/octet-stream",$"FurCoNZ-Orders-{DateTime.Now.ToString("yyyy-MM-dd")}.csv");
         }
 
         public async Task<IActionResult> Payments()

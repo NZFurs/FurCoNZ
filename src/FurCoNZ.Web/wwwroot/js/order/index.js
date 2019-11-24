@@ -16,7 +16,8 @@
 }
 
 function getAgeAtDate(dateOfBirthString, dateOfEventString) {
-    var dateOfBirth = new Date(dateOfBirthString);
+    var dateofBirthParts = dateOfBirthString.split("/")
+    var dateOfBirth = new Date(parseInt(dateofBirthParts[2]), parseInt(dateofBirthParts[1]), parseInt(dateofBirthParts[0]));
     var dateOfEvent = new Date(dateOfEventString);
     var age = dateOfEvent.getFullYear() - dateOfBirth.getFullYear();
     var m = dateOfEvent.getMonth() - dateOfBirth.getMonth();

@@ -58,6 +58,9 @@ namespace FurCoNZ.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (orderIndexViewModel.AvailableTicketTypes.All(x => x.Value.QuantityOrdered <= 0))
+                    return RedirectToAction("Index");
+
                 var viewModel = new List<TicketDetailViewModel>();
                 var ticketTypes = await _orderService.GetTicketTypesAsync(false, false, cancellationToken);
 
@@ -83,7 +86,7 @@ namespace FurCoNZ.Web.Controllers
                 return View("TicketDetail", viewModel);
             }
 
-            return View(orderIndexViewModel);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

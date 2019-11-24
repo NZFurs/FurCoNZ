@@ -49,7 +49,7 @@
                     <dd class="col-lg-9">@Html.DisplayFor(x => x.IdentificationFullName)</dd>
 
                     <dt class="col-lg-3">@Html.DisplayNameFor(x => x.DateOfBirth)</dt>
-                    <dd class="col-lg-9">@Html.DisplayFor(x => x.DateOfBirth)</dd>
+                    <dd class="col-lg-9">@Model.DateOfBirth.ToString("dd-MM-yyyy")</dd>
 
                     <dt class="col-lg-3">@Html.DisplayNameFor(x => x.DietryRequirements)</dt>
                     <dd class="col-lg-9">@(string.Join(", ", Model.DietryRequirements.Select(f => f.ToString())))</dd>

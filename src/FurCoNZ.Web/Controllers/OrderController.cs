@@ -31,7 +31,7 @@ namespace FurCoNZ.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var availableTicketTypes = await _orderService.GetTicketTypesAsync(cancellationToken: cancellationToken);
+            var availableTicketTypes = await _orderService.GetTicketTypesAsync(includeUnavailableTickets: false, includeHiddenTickets: false, cancellationToken);
 
             var viewModel = new OrderIndexViewModel
             {
@@ -62,7 +62,7 @@ namespace FurCoNZ.Web.Controllers
                     return RedirectToAction("Index");
 
                 var viewModel = new List<TicketDetailViewModel>();
-                var ticketTypes = await _orderService.GetTicketTypesAsync(false, false, cancellationToken);
+                var ticketTypes = await _orderService.GetTicketTypesAsync(includeUnavailableTickets: false, includeHiddenTickets: false, cancellationToken);
 
                 var ticketIndex = 0;
                 foreach (var ticketTypeOrdered in orderIndexViewModel.AvailableTicketTypes.Where(x => x.Value.QuantityOrdered > 0))

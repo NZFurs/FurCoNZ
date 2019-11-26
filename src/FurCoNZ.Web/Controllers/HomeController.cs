@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using FurCoNZ.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.WebUtilities;
+
+using FurCoNZ.Web.ViewModels;
 
 namespace FurCoNZ.Web.Controllers
 {
@@ -63,7 +67,31 @@ namespace FurCoNZ.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            var errorViewModel = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                Title = "We're Sorry!",
+            };
+
+            if (exceptionHandlerPathFeature.Error != null)
+                errorViewModel.Error = exceptionHandlerPathFeature.Error.Message;
+
+            return View("~/Views/Shared/Error.cshtml", errorViewModel);
+        }
+
+        [AllowAnonymous]
+        public IActionResult StatusCode(int code)
+        {
+            var errorViewModel = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                Title = $"{code} - {ReasonPhrases.GetReasonPhrase(code)}",
+                Error = string.Empty,
+            };
+
+            return View("~/Views/Shared/Error.cshtml", errorViewModel);
         }
     }
 }

@@ -1,8 +1,49 @@
-﻿<h4>That's okay!</h4>
+﻿<h4>Payment Cancelled</h4>
 
-<p>You're welcome to pay for your order within 7 days of confirmation.</p>
+<p>It seems you have cancelled your Stripe payment, so this order cannot be completed.</p>
 
-<p>Alternatively, you may also pay via direct bank transfer.</p>
+<div>
+    @* TODO: Dynaimcally fill out htis information based on inforamtion stored in the database *@
+    Your order is still confirmed, and will be held open for the following payment deadlines:
+    <table class="table">
+        <tr>
+            <td>
+                Sponsor Registration
+            </td>
+            <td>
+                13th December 2020
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Premium Registration
+            </td>
+            <td>
+                9th January 2020
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Regular Registration
+            </td>
+            <td>
+                16th January 2020
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Day Pass
+            </td>
+            <td>
+                Online payments will be available until two business days before FurCoNZ. Door sales will be available.
+            </td>
+        </tr>
+        <tr>
+            <td>
+    </table>
+</div>
+
+<p>If you have changed your mind, please contact info@furconz.org.nz so we can release the registrations back to the sales pool.</p>
 
 <a class="btn btn-primary" asp-action="Orders" asp-controller="Account">View Your Orders</a>
 <a class="btn btn-secondary" asp-action="Index" asp-controller="Home">Return</a>

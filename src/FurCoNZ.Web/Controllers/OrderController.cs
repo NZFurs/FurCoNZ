@@ -143,9 +143,21 @@ namespace FurCoNZ.Web.Controllers
                         tickets.Add(GetTicketEntityFromViewModel(ticketViewModel));
                     }
 
-                    var order = await _orderService.CreateOrderAsync(user, tickets, cancellationToken: cancellationToken);
+                    try
+                    {
+                        var order = await _orderService.CreateOrderAsync(user, tickets, cancellationToken: cancellationToken);
+                        return RedirectToAction("Index", "Checkout", new { orderId = order.Id });
+                    }
+                    catch(InvalidOperationException ex)
+                    {
+                        return View("~/Views/Shared/Error.cshtml", new ErrorViewModel
+                        {
+                            Title = "Sorry",
+                            Error = "We're Unable to Place Your Order",
+                            Description = ex.Message,
+                        });
+                    }
 
-                    return RedirectToAction("Index", "Checkout", new { orderId = order.Id });
                 }
             }
 

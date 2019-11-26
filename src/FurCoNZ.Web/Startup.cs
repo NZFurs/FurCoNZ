@@ -1,4 +1,4 @@
-// Core
+﻿// Core
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
@@ -268,10 +268,12 @@ namespace FurCoNZ.Web
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {

@@ -273,6 +273,8 @@ namespace FurCoNZ.Web
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("en-NZ")

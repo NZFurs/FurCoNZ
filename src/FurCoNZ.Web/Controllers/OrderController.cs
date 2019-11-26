@@ -153,7 +153,7 @@ namespace FurCoNZ.Web.Controllers
                         return View("~/Views/Shared/Error.cshtml", new ErrorViewModel
                         {
                             Title = "Sorry",
-                            Error = ", We're Unable to Place Your Order",
+                            Error = "We're Unable to Place Your Order",
                             Description = ex.Message,
                         });
                     }

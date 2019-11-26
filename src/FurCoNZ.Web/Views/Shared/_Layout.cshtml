@@ -70,8 +70,6 @@
                             <a class="nav-link text-dark" asp-area="admin" asp-controller="Home" asp-action="Index">Admin</a>
                         </li>
                     </ul>
-                    @* For now, hide the login nav buttons on the production site (yes, i know you can read this, yes i know you can jsut navigate manually. shhhh 🤫 *@
-                    <environment include="Development">
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -104,7 +102,6 @@
                             </li>
                         }
                     </ul>
-                    </environment>
                 </div>
             </div> 
         </nav>

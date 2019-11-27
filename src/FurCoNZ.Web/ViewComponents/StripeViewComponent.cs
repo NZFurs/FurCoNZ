@@ -61,6 +61,8 @@ namespace FurCoNZ.Web.Components
 
             Stripe.StripeConfiguration.ApiKey = _stripeOptions.Value.SecretKey;
 
+            var paidDiscount = 1 - ((decimal)order.AmountPaidCents / (decimal)order.TotalAmountCents);
+
             var checkoutSessionOptions = new Stripe.Checkout.SessionCreateOptions
             {
                 // TODO: Make PaymentMethodTypes configurable
@@ -68,7 +70,7 @@ namespace FurCoNZ.Web.Components
                 CustomerEmail = user.Email,
                 LineItems = lineItems.Select(l => new Stripe.Checkout.SessionLineItemOptions {
                     Name = l.Key.Name,
-                    Amount = l.Key.PriceCents,
+                    Amount = Convert.ToInt64(Math.Round(l.Key.PriceCents * paidDiscount)),
                     Description = l.Key.Description,
                     Currency = "NZD",
                     Quantity = l.Count(), // This need to be calculated
@@ -89,7 +91,18 @@ namespace FurCoNZ.Web.Components
                 CancelUrl = Url.Action("Cancelled", "Stripe", null, Request.Scheme),
             };
 
+
             var subTotal = checkoutSessionOptions.LineItems.Sum(l => l.Amount.Value * l.Quantity);
+            if (order.AmountOwingCents != subTotal)
+            {
+                checkoutSessionOptions.LineItems.First().Amount += (order.AmountOwingCents - subTotal);
+                // recalculate subtotal
+                subTotal = checkoutSessionOptions.LineItems.Sum(l => l.Amount.Value * l.Quantity);
+
+                if (order.AmountOwingCents != subTotal)
+                    throw new InvalidOperationException("Unable to process the discount for this order. Please contact us to resolve this issue.");
+            }
+
             // Calculate stripe fee to ensure received amount is what's requested.
             var stripeFee = ((subTotal + _stripeFeeFixed) * 1000 / _stripeFeePercentInverse) - subTotal;
 

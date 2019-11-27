@@ -99,7 +99,8 @@ namespace FurCoNZ.Web.Services.Payment
                     stripeSession.OrderId, amountReceived,
                     NAME, session.PaymentIntentId,
                     session.PaymentIntent.Created.Value,
-                    cancellationToken);
+                    allowDuplicates: false,
+                    cancellationToken: cancellationToken);
 
                 stripeSession.State = StripeSessionState.Completed;
                 // TODO: Record audit log of payment received.

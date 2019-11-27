@@ -176,6 +176,7 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
                     receivedPayment.AmountCents,
                     BankPaymentProvider.NAME, receivedPayment.OrderReference,
                     receivedPayment.When,
+                    allowDuplicates: true,
                     HttpContext.RequestAborted);
 
                 if (HttpContext.Request.Headers.ContainsKey("Referer"))

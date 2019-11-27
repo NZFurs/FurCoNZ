@@ -7,36 +7,63 @@
     <small class="text-muted"> - Order #@Model.Order.Id</small>
 </h2>
 
-<table class="table table-light">
-    <thead>
-        <tr>
-            <th scope="col">Ticket Type</th>
-            <th scope="col">Recipient</th>
-            <th scope="col">Cost</th>
-        </tr>
-    </thead>
-    @foreach (var ticket in Model.Order.Tickets)
-    {
-        <tr>
-            <td>@ticket.TicketType.Name</td>
-            <td>@ticket.PreferredFullName</td>
-            <td>@ticket.TicketType.Price.ToString("C")</td>
-        </tr>
-    }
-    <tfoot>
-        @* TODO: Only display this if GST is enabled *@
-        @*<tr>
-            <td>&nbsp;</td>
-            <th class="text-right">GST (Included):</th>
-            <th>@((Model.Order.AmountTotal * 3 / 23).ToString("C"))</th>
-        </tr>*@
-        <tr>
-            <td>&nbsp;</td>
-            <th class="text-right">Total:</th>
-            <th>@Model.Order.AmountTotal.ToString("C")</th>
-        </tr>
-    </tfoot>
-</table>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-borderless table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Ticket Type</th>
+                    <th scope="col">Recipient</th>
+                    <th scope="col">Cost</th>
+                </tr>
+            </thead>
+            @foreach (var ticket in Model.Order.Tickets)
+            {
+                <tr>
+                    <td>@ticket.TicketType.Name</td>
+                    <td>@ticket.PreferredFullName</td>
+                    <td>@ticket.TicketType.Price.ToString("C")</td>
+                </tr>
+            }
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        <hr class="m-0" />
+                    </td>
+                </tr>
+                @* TODO: Only display this if GST is enabled *@
+                @*<tr>
+                    <td>&nbsp;</td>
+                    <th class="text-right">GST (Included):</th>
+                    <th>@((Model.Order.AmountTotal * 3 / 23).ToString("C"))</th>
+                </tr>*@
+                <tr>
+                    <td>&nbsp;</td>
+                    <th class="text-right">Total:</th>
+                    <th>@Model.Order.AmountTotal.ToString("C")</th>
+                </tr>
+                @if (Model.Order.AmountPaidCents > 0)
+                {
+                    <tr>
+                        <td>&nbsp;</td>
+                        <th class="text-right">Amount Paid:</th>
+                        <th>@Model.Order.AmountPaid.ToString("C")</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <hr class="m-0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <th class="text-right">Owing:</th>
+                        <th>@Model.Order.AmountOwing.ToString("C")</th>
+                    </tr>
+                }
+            </tfoot>
+        </table>
+    </div>
+</div>
 
 <div class="accordion" id="paymentProviders">
     @foreach (var payment in Model.PaymentProviders)

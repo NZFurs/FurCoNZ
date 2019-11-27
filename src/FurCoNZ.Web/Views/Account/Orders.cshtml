@@ -12,6 +12,10 @@
             <p class="text-muted">Order Refernce #@($"{order.Id}{FurCoNZ.Web.Helpers.DammAlgorithm.GetCheck(order.Id)}")</p>
         </div>
         <div class="card-body">
+            @if (order.Status == "Owing")
+            {
+                <div class="alert alert-info" role="alert">You will be required to pay by <strong>@order.PayByDate.ToString("MMMM dd, hh:mm tt")</strong>, else the order will be cancelled and the tickets will be released.</div>
+            }
             <table class="table table-borderless table-sm">
                 <thead>
                     <tr>

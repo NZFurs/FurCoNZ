@@ -275,9 +275,19 @@ namespace FurCoNZ.Web
 
             app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
 
+            var supportedCultures = new[]
+            {
+                System.Globalization.CultureInfo.GetCultureInfo("en-NZ"),
+                System.Globalization.CultureInfo.GetCultureInfo("en-AU"),
+                System.Globalization.CultureInfo.GetCultureInfo("en-US"),
+                System.Globalization.CultureInfo.GetCultureInfo("en"),
+            };
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("en-NZ")
+                DefaultRequestCulture = new RequestCulture("en-NZ"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures,
             });
 
 

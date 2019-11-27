@@ -137,7 +137,7 @@ namespace FurCoNZ.Web.Services
                 .SingleOrDefaultAsync(o => o.OrderedById == user.Id && o.AmountPaidCents == 0, cancellationToken);
         }
 
-        public async Task AddReceivedFundsForOrderAsync(int orderId, int amountCents, string paymentProvider, string paymentReference, DateTimeOffset when, CancellationToken cancellationToken = default)
+        public async Task AddReceivedFundsForOrderAsync(int orderId, int amountCents, string paymentProvider, string paymentReference, DateTimeOffset when, bool allowDuplicates = false, CancellationToken cancellationToken = default)
         {
             var order = await _db.Orders
                 .Include(o => o.Audits)
@@ -146,7 +146,7 @@ namespace FurCoNZ.Web.Services
                 .ThenInclude(t => t.TicketType)
                 .SingleAsync(o => o.Id == orderId, cancellationToken);
 
-            if (order.Audits.Any(a => a.PaymentProvider == paymentProvider && a.PaymentProviderReference == paymentReference && a.Type == AuditType.Received))
+            if (!allowDuplicates && order.Audits.Any(a => a.PaymentProvider == paymentProvider && a.PaymentProviderReference == paymentReference && a.Type == AuditType.Received))
             {
                 // What about back transfers?
                 _logger.LogError($"Received funds for order {orderId} has already been applied for {paymentProvider}: {paymentReference}");

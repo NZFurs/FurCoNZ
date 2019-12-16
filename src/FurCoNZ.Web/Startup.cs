@@ -185,9 +185,21 @@ namespace FurCoNZ.Web
             services.Configure<BankSettings>(Configuration.GetSection("BankTransfer"));
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
 
+            // Configure FluentEmail
+            services
+                .AddFluentEmail(
+                    Configuration["Email:FromAddress"],
+                    Configuration["Email:FromName"]
+                )
+                .AddMailGunSender(
+                    Configuration["Email:MailGun:Domain"],
+                    Configuration["Email:MailGun:ApiKey"],
+                    Configuration["Email:MailGun:Region"].ToLowerInvariant() == "eu" ? FluentEmail.Mailgun.MailGunRegion.EU : FluentEmail.Mailgun.MailGunRegion.USA
+                );
+
             // Add application services to DI
-            services.AddTransient<ISendGridClient>(c => new SendGridClient(Configuration["SendGrid:ApiKey"]));
-            services.AddTransient<IEmailProvider, SendGridEmailProvider>();
+            //services.AddTransient<ISendGridClient>(c => new SendGridClient(Configuration["SendGrid:ApiKey"]));
+            services.AddTransient<IEmailProvider, FluentEmailProvider>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IReminderService, ReminderService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();

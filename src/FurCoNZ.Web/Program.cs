@@ -33,10 +33,6 @@ namespace FurCoNZ.Web
                 ExecuteApp(args, doMigrate, verifyMigrate);
                 return 0;
             });
-
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-NZ");
-            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
-
             commandLineApplication.Execute(args);
         }
 

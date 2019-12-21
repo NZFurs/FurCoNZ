@@ -23,8 +23,6 @@ namespace FurCoNZ.Web.ViewModels
             AmountTotalCents = order.TotalAmountCents;
             AmountOwingCents = order.AmountOwingCents;
             AmountPaidCents = order.AmountPaidCents;
-
-            PayByDate = order.TicketsPurchased.Select(td => td.TicketType.SoldOutAt).OrderBy(soa => soa).FirstOrDefault();
         }
 
         public int Id { get; set; }
@@ -40,8 +38,6 @@ namespace FurCoNZ.Web.ViewModels
         public int AmountTotalCents { get; set; }
         public int AmountOwingCents { get; set; }
         public int AmountPaidCents { get; set; }
-
-        public DateTimeOffset PayByDate { get; set; }
 
         public string Status
         {

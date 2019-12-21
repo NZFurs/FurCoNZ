@@ -19,9 +19,9 @@ namespace FurCoNZ.Web.Services
     {
         private readonly IFluentEmail _email;
         private readonly ILogger _logger;
-        private readonly FluentEmailProviderOptions _options;
+        private readonly EmailServiceOptions _options;
 
-        public FluentEmailProvider(IFluentEmail email, IOptions<FluentEmailProviderOptions> options, ILogger<EmailProvider> logger)
+        public FluentEmailProvider(IFluentEmail email, IOptions<EmailServiceOptions> options, ILogger<FluentEmailProvider> logger)
         {
             _email = email;
             _logger = logger;

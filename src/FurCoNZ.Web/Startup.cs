@@ -177,7 +177,7 @@ namespace FurCoNZ.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.Configure<SendGridEmailServiceOptions>(options => Configuration.GetSection("SendGrid").Bind(options));
+            services.Configure<EmailServiceOptions>(options => Configuration.GetSection("Email").Bind(options));
             services.Configure<ReminderServiceOptions>(options =>
             {
                 options.RemindUserOfUnpaidOrderEveryXDays = Configuration.GetValue<int>("Orders:RemindUserOfUnpaidOrderEveryXDays");

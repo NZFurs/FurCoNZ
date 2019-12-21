@@ -16,13 +16,13 @@ using FurCoNZ.Web.Options;
 
 namespace FurCoNZ.Web.Services
 {
-    public class SendGridEmailProvider : IEmailProvider
+    public class EmailProvider : IEmailProvider
     {
         private readonly ISendGridClient _sendGridClient;
         private readonly ILogger _logger;
-        private readonly SendGridEmailServiceOptions _options;
+        private readonly EmailServiceOptions _options;
 
-        public SendGridEmailProvider(ISendGridClient sendGridClient, IOptions<SendGridEmailServiceOptions> options, ILogger<SendGridEmailProvider> logger)
+        public EmailProvider(ISendGridClient sendGridClient, IOptions<EmailServiceOptions> options, ILogger<EmailProvider> logger)
         {
             _sendGridClient = sendGridClient;
             _logger = logger;

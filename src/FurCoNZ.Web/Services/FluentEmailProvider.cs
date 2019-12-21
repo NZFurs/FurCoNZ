@@ -21,7 +21,7 @@ namespace FurCoNZ.Web.Services
         private readonly ILogger _logger;
         private readonly FluentEmailProviderOptions _options;
 
-        public FluentEmailProvider(IFluentEmail email, IOptions<FluentEmailProviderOptions> options, ILogger<SendGridEmailProvider> logger)
+        public FluentEmailProvider(IFluentEmail email, IOptions<FluentEmailProviderOptions> options, ILogger<EmailProvider> logger)
         {
             _email = email;
             _logger = logger;

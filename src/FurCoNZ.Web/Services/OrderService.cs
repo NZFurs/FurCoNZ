@@ -246,5 +246,22 @@ namespace FurCoNZ.Web.Services
             // Strip the check value from our orderRef to get the orderId
             return await GetOrderById(orderRef / 10, cancellationToken);
         }
+
+        public async Task<IEnumerable<Ticket>> GetDetailedAttendeeListAsync(bool includeExpiredOrders = false, CancellationToken cancellationToken = default)
+        {
+            var ticketsListQuery = _db.Tickets.AsQueryable();
+
+            if (!includeExpiredOrders)
+            {
+                ticketsListQuery = ticketsListQuery.Where(t => t.Order.AmountPaidCents > 0 || t.Order.TicketsPurchased.All(tp => tp.TicketType.SoldOutAt <= DateTimeOffset.Now));
+            }
+
+            return await ticketsListQuery
+                .Include(t => t.TicketType)
+                .Include(t => t.Order)
+                .ThenInclude(o => o.OrderedBy)
+                .OrderBy(t => t.OrderId)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

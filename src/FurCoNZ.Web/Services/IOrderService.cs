@@ -19,5 +19,6 @@ namespace FurCoNZ.Web.Services
         Task<DateTimeOffset> ReserveTicketsForPurchaseAsync(IDictionary<int, int> ticketsToReserveById, CancellationToken cancellationToken = default);
         Task<Order> GetOrderByRef(int orderRef, CancellationToken cancellationToken = default);
         Task<Order> GetOrderById(int orderId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Ticket>> GetDetailedAttendeeListAsync(bool includeExpiredOrders = false, CancellationToken cancellationToken = default);
     }
 }

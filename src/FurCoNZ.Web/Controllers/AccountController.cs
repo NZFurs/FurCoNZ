@@ -100,7 +100,7 @@ namespace FurCoNZ.Web.Controllers
             {
                 Tickets = orders
                     // Filter out refunded tickets
-                    .Where(o => o.Audits.All(a => a.Type != AuditType.Refunded))
+                    .Where(o => o.Audits.All(a => a.Type != AuditType.Refunded && a.Type != AuditType.Cancelled))
                     .SelectMany(o => o.TicketsPurchased)
                     .Select(t => new TicketDetailViewModel(t))
                     .OrderBy(t => t.Id).ToList(),

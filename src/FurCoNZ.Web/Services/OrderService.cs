@@ -151,6 +151,10 @@ namespace FurCoNZ.Web.Services
                 // What about back transfers?
                 _logger.LogError($"Received funds for order {orderId} has already been applied for {paymentProvider}: {paymentReference}");
             }
+            else if (order.IsCancelled)
+            {
+                _logger.LogError($"Received funds for order {orderId} has already been cancelled.");
+            }
             else
             {
                 var audit = new OrderAudit
@@ -262,6 +266,36 @@ namespace FurCoNZ.Web.Services
                 .ThenInclude(o => o.OrderedBy)
                 .OrderBy(t => t.OrderId)
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task CancelOrderAsync(int orderId, CancellationToken cancellationToken = default)
+        {
+            var order = await _db.Orders
+                .Include(o => o.Audits)
+                .Include(o => o.OrderedBy)
+                .SingleAsync(o => o.Id == orderId, cancellationToken);
+
+            if (order.Audits.Any(a => a.Type == AuditType.Received))
+            {
+                throw new InvalidOperationException("Can not cancel an order with received funds. Please refund it instead.");
+            }
+
+            var audit = new OrderAudit
+            {
+                OrderId = orderId,
+                PaymentProvider = string.Empty,
+                PaymentProviderReference = string.Empty,
+                Type = AuditType.Cancelled,
+                When = DateTimeOffset.Now,
+                AmountCents = 0,
+            };
+
+            _db.OrderAudits.Add(audit);
+
+            await _db.SaveChangesAsync(cancellationToken);
+
+            // TODO: Send cancellation email.
+            //await _emailService.SendOrderCancelledAsync(order, cancellationToken);
         }
     }
 }

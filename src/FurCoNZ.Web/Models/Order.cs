@@ -12,6 +12,14 @@ namespace FurCoNZ.Web.Models
         public virtual User OrderedBy { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
 
+        public bool IsCancelled
+        {
+            get
+            {
+                return Audits.Any(a => a.Type == AuditType.Cancelled);
+            }
+        }
+
         public int TotalAmountCents
         {
             get

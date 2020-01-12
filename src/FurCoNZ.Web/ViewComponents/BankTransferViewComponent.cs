@@ -39,6 +39,9 @@ namespace FurCoNZ.Web.ViewComponents
             if (order.AmountPaidCents >= order.TotalAmountCents)
                 return View(); // Default view displays nothing to the end user.
 
+            if (order.IsCancelled)
+                return View(); // Default view displays nothing to the end user.
+
             // TODO: Generate a payment uniquie reference number for the order id
             return View("Input", new BankTransferViewModel
             {

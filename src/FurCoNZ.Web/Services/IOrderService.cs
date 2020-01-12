@@ -20,5 +20,6 @@ namespace FurCoNZ.Web.Services
         Task<Order> GetOrderByRef(int orderRef, CancellationToken cancellationToken = default);
         Task<Order> GetOrderById(int orderId, CancellationToken cancellationToken = default);
         Task<IEnumerable<Ticket>> GetDetailedAttendeeListAsync(bool includeExpiredOrders = false, CancellationToken cancellationToken = default);
+        Task CancelOrderAsync(int orderId, CancellationToken cancellationToken = default);
     }
 }

@@ -43,6 +43,9 @@ namespace FurCoNZ.Web.ViewModels
         {
             get
             {
+                if (Audits.Any(a => a.Type == nameof(AuditType.Cancelled)))
+                    return "Cancelled";
+
                 if (Audits.Any(a => a.Type == nameof(AuditType.Refunded)))
                     return "Refunded";
 

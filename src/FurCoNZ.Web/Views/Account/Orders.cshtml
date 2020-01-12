@@ -2,10 +2,16 @@
 @model AccountOrdersViewModel
 @{
     Layout = "_AccountLayout.cshtml";
+
 }
+
 
 @foreach (var order in Model.Orders)
 {
+    var cancelled = order.Status == FurCoNZ.Web.Models.AuditType.Cancelled.ToString();
+    var s = cancelled ? "<s>" : string.Empty;
+    var se = cancelled ? "</s>" : string.Empty;
+
     <div class="card">
         <div class="card-header">
             <p class="h4">Order #@order.Id <small class="text-muted"> - @order.Status</small></p>
@@ -23,11 +29,13 @@
                 @foreach (var ticket in order.Tickets)
                 {
                     <tr>
-                        <td>@ticket.TicketType.Name</td>
-                        <td>@(string.IsNullOrWhiteSpace(ticket.PreferredFullName) ? ticket.IdentificationFullName : ticket.PreferredFullName)</td>
-                        <td>@ticket.TicketType.Price.ToString("C")</td>
+                        <td>@Html.Raw(@s) @ticket.TicketType.Name @Html.Raw(@se)</td>
+                        <td>@Html.Raw(@s) @(string.IsNullOrWhiteSpace(ticket.PreferredFullName) ? ticket.IdentificationFullName : ticket.PreferredFullName) @Html.Raw(@se)</td>
+                        <td>@Html.Raw(@s) @ticket.TicketType.Price.ToString("C") @Html.Raw(@se)</td>
                     </tr>
                 }
+            @if (!cancelled)
+            {
             <tfoot>
                 <tr>
                     <td colspan="3"><hr class="m-0" /></td>
@@ -49,6 +57,7 @@
                     <th>@order.AmountPaid.ToString("C")</th>
                 </tr>
             </tfoot>
+            }
             </table>
             <div class="float-right">
                 @if (order.Status == "Owing")

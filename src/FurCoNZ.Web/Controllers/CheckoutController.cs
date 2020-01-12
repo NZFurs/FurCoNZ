@@ -38,6 +38,9 @@ namespace FurCoNZ.Web.Controllers
             if (order == null)
                 return NotFound();
 
+            if (order.IsCancelled)
+                throw new InvalidOperationException("Order has been cancelled and payments may not be made");
+
             if (order.Audits.Any(a => a.Type == AuditType.Refunded))
                 return RedirectToAction(nameof(AccountController.Orders), "Account");
 

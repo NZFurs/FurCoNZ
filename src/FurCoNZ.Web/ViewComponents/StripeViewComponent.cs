@@ -54,8 +54,12 @@ namespace FurCoNZ.Web.Components
             if (order == null)
                 return View(); // Default view displays nothing to the end user.
 
+
             if (order.AmountPaidCents >= order.TotalAmountCents)
                 return View(); // Default view displays nothing to the end user.
+
+            if (order.IsCancelled)
+                return View();
 
             var lineItems = order.TicketsPurchased.GroupBy(t => t.TicketType, new TicketTypeComparer());
 

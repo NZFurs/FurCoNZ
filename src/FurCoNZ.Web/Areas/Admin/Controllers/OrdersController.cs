@@ -135,6 +135,22 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index), new { id = order.Id });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(OrderViewModel orderViewModel)
+        {
+            // TODO: Refund a select payment
+            var order = await _orderService.GetOrderById(orderViewModel.Id, HttpContext.RequestAborted);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            await _orderService.CancelOrderAsync(order.Id, HttpContext.RequestAborted);
+
+            return RedirectToAction(nameof(Index), new { id = order.Id });
+        }
+
         public async Task<IActionResult> VerifyOrderRef(string orderReference)
         {
             if (!int.TryParse(orderReference, out var orderRefAsInt))

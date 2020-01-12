@@ -44,5 +44,6 @@ namespace FurCoNZ.Web.Models
         Unknown = 0,
         Received = 1,
         Refunded = 2,
+        Cancelled = 3,
     }
 }

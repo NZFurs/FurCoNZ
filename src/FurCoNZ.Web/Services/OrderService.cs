@@ -264,6 +264,8 @@ namespace FurCoNZ.Web.Services
                 .Include(t => t.TicketType)
                 .Include(t => t.Order)
                 .ThenInclude(o => o.OrderedBy)
+                .Include(t => t.Order)
+                .ThenInclude(o => o.Audits)
                 .OrderBy(t => t.OrderId)
                 .ToListAsync(cancellationToken);
         }

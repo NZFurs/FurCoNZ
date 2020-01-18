@@ -20,6 +20,23 @@ namespace FurCoNZ.Web.Models
             }
         }
 
+        public string Status
+        {
+            get
+            {
+                if (Audits.Any(a => a.Type == AuditType.Cancelled))
+                    return "Cancelled";
+
+                if (Audits.Any(a => a.Type == AuditType.Refunded))
+                    return "Refunded";
+
+                if (AmountOwingCents <= 0)
+                    return "Paid";
+
+                return "Owing";
+            }
+        }
+
         public int TotalAmountCents
         {
             get

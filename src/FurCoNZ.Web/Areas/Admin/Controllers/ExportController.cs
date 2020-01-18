@@ -20,23 +20,23 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
             _orderService = orderService;
         }
 
-        // GET: /<controller>/
-        public async Task<IActionResult> Attendence(CancellationToken cancellationToken = default)
+        private async Task<string>GetTickets(bool includeExpiredOrders = false, CancellationToken cancellationToken = default)
         {
             // TODO: Use formatter: https://github.com/damienbod/WebAPIContrib.Core/tree/master/src/WebApiContrib.Core.Formatter.Csv
 
-            var tickets = await _orderService.GetDetailedAttendeeListAsync(cancellationToken: cancellationToken);
+            var tickets = await _orderService.GetDetailedAttendeeListAsync(includeExpiredOrders: includeExpiredOrders, cancellationToken: cancellationToken);
 
             var csv = new StringBuilder();
 
-            csv.AppendLine("\"Order Id\",\"Order Placed At\",\"Order Placed By\",\"Order Paid Amount\",\"Ticket Id\",\"Ticket Type\",\"Badge Name\",\"Legal Name\",\"Preferred Name\",\"Order Account Email Address\",\"Ticket Holder Email Address\",\"Ticket Holder Date of Birth\",\"Meal Requirements (flags)\",\"Medical Requirements\",\"Cabin Preferences\",\"Additional Notes\",\"Accepted T&C\"");
+            csv.AppendLine("\"Order Id\",\"Order Placed At\",\"Order Placed By\",\"Order Status\",\"Order Paid Amount\",\"Ticket Id\",\"Ticket Type\",\"Badge Name\",\"Legal Name\",\"Preferred Name\",\"Order Account Email Address\",\"Ticket Holder Email Address\",\"Ticket Holder Date of Birth\",\"Meal Requirements (flags)\",\"Medical Requirements\",\"Cabin Preferences\",\"Additional Notes\",\"Accepted T&C\"");
 
-            foreach(var ticket in tickets)
+            foreach (var ticket in tickets)
             {
                 csv.AppendJoin(',',
                     ticket.Order.Id,
                     ticket.Order.CreatedAt,
                     $"\"{ticket.Order.OrderedBy.Name}\"",
+                    ticket.Order.Status,
                     ticket.Order.AmountPaidCents,
                     ticket.Id,
                     ticket.TicketType.Name,
@@ -55,13 +55,21 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
                 csv.Append(Environment.NewLine);
             }
 
+            return csv.ToString();
+        }
+
+        // GET: /<controller>/
+        public async Task<IActionResult> Tickets()
+        {
             Response.Headers.Add("content-disposition", $"attachment; filename=attendence-{DateTime.Now.ToString("yyyy-MM-dd")}.csv");
-            return Content(csv.ToString(), "text/csv");
+            return Content(await GetTickets(true, HttpContext.RequestAborted), "text/csv");
+        }
 
-            // Response.ContentType = "application/CSV";
-            
-
-            // return Ok(csv.ToString());
+        // GET: /<controller>/
+        public async Task<IActionResult> Attendence()
+        {
+            Response.Headers.Add("content-disposition", $"attachment; filename=attendence-{DateTime.Now.ToString("yyyy-MM-dd")}.csv");
+            return Content(await GetTickets(false, HttpContext.RequestAborted), "text/csv");
         }
     }
 }

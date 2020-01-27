@@ -33,7 +33,7 @@ jobs:
     condition: not(${{ variables.isPullRequest }})
     displayName: Publish to Docker Hub
 
-- job: deploy
+- job: deploy_test
   displayName: Deploy Test Site
   dependsOn: 
   - build
@@ -56,4 +56,25 @@ jobs:
       inline: docker-compose --project-directory /opt/furconz/ -f /opt/furconz/docker-compose.yml up -d web-test
       failOnStdErr: false
 
-
+- job: deploy_production
+  displayName: Deploy Production Site
+  dependsOn:
+  - build
+  variables:
+    dockerId: nzfurs
+    imageName: 'furconz'
+    isPullRequest: eq(variables['Build.Reason'], 'PullRequest')
+  condition: and(not(${{ variables.isPullRequest }}), in(variables['Build.SourceBranch'], 'refs/heads/release'))
+  steps:
+  - checkout: none #skip checking out the default repository resource
+  - task: SSH@0
+    inputs:
+      sshEndpoint: furconz-production
+      runOptions: inline
+      inline: docker pull nzfurs/furconz:stable
+  - task: SSH@0
+    inputs:
+      sshEndpoint: furconz-production
+      runOptions: inline
+      inline: docker-compose --project-directory /opt/furconz/ -f /opt/furconz/docker-compose.yml up -d web
+      failOnStdErr: false

@@ -6,8 +6,8 @@
 @if (!Model.AvailableTicketTypes.Any() || Model.AvailableTicketTypes.Sum(tt => tt.Value.TotalAvailable) <= 0)
 {
     <div class="text-center">
-        <h1>Tickets are not yet available!</h1>
-        <p>Check back soon!</p>
+        <h1>Online registration has now closed.</h1>
+        <p>Day Passes will still be available as door sales (cash only) on the respective days of the Con.</p>
     </div>
 }
 else

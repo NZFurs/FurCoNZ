@@ -1,0 +1,6 @@
+﻿@model DateTimeOffset
+@{
+    Layout = null;
+    var timeZone = TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time");
+}
+@TimeZoneInfo.ConvertTime(Model, timeZone).ToString("yyyy-MM-dd h:mm tt")

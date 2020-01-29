@@ -36,9 +36,11 @@ namespace FurCoNZ.Web.Models
 
         public string CabinGrouping { get; set; }
         public CabinActivityType CabinNoisePreference { get; set; }
+        public string CabinAssignment { get; set; }
 
         public string AdditionalNotes { get; set; }
 
+        public DateTimeOffset? CheckInTime { get; set; }
         public bool AcceptedTermsAndConditions { get; set; }
     }
 

@@ -10,7 +10,7 @@ namespace FurCoNZ.Web.ViewModels
     public class TicketDetailViewModel : IValidatableObject
     {
         public int Id { get; set; }
-
+        public int OrderId { get; }
         [Required]
         public TicketTypeViewModel TicketType { get; set; }
 
@@ -80,6 +80,8 @@ namespace FurCoNZ.Web.ViewModels
         {
             Id = ticket.Id;
 
+            OrderId = ticket.OrderId;
+
             // TODO: Ticket Type View Model?
             TicketType = new TicketTypeViewModel(ticket.TicketType);
 
@@ -113,7 +115,19 @@ namespace FurCoNZ.Web.ViewModels
             TermsAndConditions = ticket.AcceptedTermsAndConditions 
                 ? TermsAndConditions.Accepted 
                 : TermsAndConditions.NotAccepted;
+
+            CheckInTime = ticket.CheckInTime;
+            CabinAssignment = ticket.CabinAssignment;
         }
+
+        [Display(Name ="Checkin Time")]
+        public DateTimeOffset? CheckInTime { get; set; }
+
+        [Display(Name ="Is Checked In")]
+        public bool IsCheckedIn { get => CheckInTime.HasValue; }
+
+        [Display(Name ="Cabin Assignment")]
+        public string CabinAssignment { get; set; }
     }
 
     public enum TermsAndConditions

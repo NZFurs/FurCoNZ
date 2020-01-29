@@ -299,5 +299,44 @@ namespace FurCoNZ.Web.Services
             // TODO: Send cancellation email.
             //await _emailService.SendOrderCancelledAsync(order, cancellationToken);
         }
+
+        public async Task CheckInTicketAsync(int ticketId, CancellationToken cancellationToken)
+        {
+            var ticket = await _db.Tickets
+                .Include(t => t.Order)
+                .Include(t => t.TicketType)
+                .SingleOrDefaultAsync(t => t.Id == ticketId);
+
+            if (ticket == null)
+                throw new KeyNotFoundException($"Ticket #{ticketId} was not found");
+
+            if (ticket.Order.AmountOwingCents > 0)
+                throw new InvalidOperationException($"Order for ticket #{ticketId} is owing {((decimal)ticket.Order.AmountOwingCents)/100:G}");
+
+            if (ticket.CheckInTime.HasValue)
+                throw new KeyNotFoundException($"Ticket #{ticketId} was already checked in at {ticket.CheckInTime.Value}.");
+
+            ticket.CheckInTime = DateTimeOffset.Now;
+
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task UndoCheckInTicketAsync(int ticketId, CancellationToken cancellationToken)
+        {
+            var ticket = await _db.Tickets
+                .Include(t => t.Order)
+                .Include(t => t.TicketType)
+                .SingleOrDefaultAsync(t => t.Id == ticketId);
+
+            if (ticket == null)
+                throw new KeyNotFoundException($"Ticket #{ticketId} was not found.");
+
+            if (!ticket.CheckInTime.HasValue)
+                throw new KeyNotFoundException($"Ticket #{ticketId} was not checked in.");
+
+            ticket.CheckInTime = null;
+
+            await _db.SaveChangesAsync();
+        }
     }
 }

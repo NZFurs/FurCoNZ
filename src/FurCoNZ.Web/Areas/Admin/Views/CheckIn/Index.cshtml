@@ -58,9 +58,17 @@
                 <td>
                     @if (ticket.IsCheckedIn)
                     {
+                        @Html.DisplayFor(_ => ticket.CheckInTime.Value)
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" class="text-right border-0">
+                    @if (ticket.IsCheckedIn)
+                    {
                         <form asp-action="UndoCheckInTicket">
                             <input type="hidden" name="ticketId" value="@ticket.Id" />
-                            <button type="button" class="btn btn-success">Arrived at @Html.DisplayFor(_ => ticket.CheckInTime.Value)</button>
+                            <button type="button" class="btn btn-success">Arrived</button>
                             <button type="submit" class="btn btn-warning">Check Out</button>
                         </form>
                     }

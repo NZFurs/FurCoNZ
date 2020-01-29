@@ -28,7 +28,7 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
 
             var csv = new StringBuilder();
 
-            csv.AppendLine("\"Order Id\",\"Order Placed At\",\"Order Placed By\",\"Order Status\",\"Order Paid Amount\",\"Ticket Id\",\"Ticket Type\",\"Badge Name\",\"Legal Name\",\"Preferred Name\",\"Order Account Email Address\",\"Ticket Holder Email Address\",\"Ticket Holder Date of Birth\",\"Meal Requirements (flags)\",\"Medical Requirements\",\"Cabin Preferences\",\"Additional Notes\",\"Accepted T&C\"");
+            csv.AppendLine("\"Order Id\",\"Order Placed At\",\"Order Placed By\",\"Order Status\",\"Order Paid Amount\",\"Ticket Id\",\"Ticket Type\",\"Badge Name\",\"Legal Name\",\"Preferred Name\",\"Order Account Email Address\",\"Ticket Holder Email Address\",\"Ticket Holder Date of Birth\",\"Meal Requirements (flags)\",\"Medical Requirements\",\"Cabin Preferences\",\"Additional Notes\",\"Cabin Assignment\",\"Accepted T&C\"");
 
             foreach (var ticket in tickets)
             {
@@ -50,6 +50,7 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
                     $"\"{ticket.KnownAllergens}\"",
                     $"\"{ticket.CabinGrouping}\"",
                     $"\"{ticket.AdditionalNotes}\"",
+                    $"\"{ticket.CabinAssignment}\"",
                     ticket.AcceptedTermsAndConditions
                 );
                 csv.Append(Environment.NewLine);
@@ -61,7 +62,7 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Tickets()
         {
-            Response.Headers.Add("content-disposition", $"attachment; filename=attendence-{DateTime.Now.ToString("yyyy-MM-dd")}.csv");
+            Response.Headers.Add("content-disposition", $"attachment; filename=tickets-{DateTime.Now.ToString("yyyy-MM-dd")}.csv");
             return Content(await GetTickets(true, HttpContext.RequestAborted), "text/csv");
         }
 

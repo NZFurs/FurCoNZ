@@ -28,7 +28,7 @@ namespace FurCoNZ.Web.Areas.Admin.Controllers
         {
             var tickets = await _orderService.GetDetailedAttendeeListAsync(includeExpiredOrders: false, cancellationToken);
 
-            return View(tickets.Select(t => new TicketDetailViewModel(t)));
+            return View(tickets.OrderBy(t => t.TicketName).Select(t => new TicketDetailViewModel(t)));
         }
 
         [HttpPost]

@@ -26,6 +26,9 @@
                 Date Of Birth
             </th>
             <th>
+                Ticket Type
+            </th>
+            <th>
                 Cabin Assigned
             </th>
             <th>
@@ -34,7 +37,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var ticket in Model.OrderByDescending(t => t.BadgeName))
+        @foreach (var ticket in Model)
         {
             <tr>
                 <td>
@@ -53,6 +56,9 @@
                     @Html.DisplayFor(_ => ticket.DateOfBirth)
                 </td>
                 <td>
+                    @Html.DisplayFor(_ => ticket.TicketType.Name)
+                </td>
+                <td>
                     @Html.DisplayFor(_ => ticket.CabinAssignment) @* This is a new string column, we'll populate this manually from Kendra/Nimble's spreadsheet *@
                 </td>
                 <td>
@@ -63,7 +69,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="7" class="text-right border-0">
+                <td colspan="8" class="text-right border-0">
                     @if (ticket.IsCheckedIn)
                     {
                         <form asp-action="UndoCheckInTicket">

@@ -1,0 +1,80 @@
+﻿@using FurCoNZ.Web.Models;
+@model IEnumerable<TicketDetailViewModel>;
+
+@{
+    ViewData["Title"] = "Chicken";
+}
+
+<h1>Chicken</h1>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>
+                Order ID
+            </th>
+            <th>
+                Badge Name
+            </th>
+            <th>
+                Legal Name
+            </th>
+            <th>
+                Preferred Name
+            </th>
+            <th>
+                Date Of Birth
+            </th>
+            <th>
+                Cabin Assigned
+            </th>
+            <th>
+                Checked In
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model.OrderByDescending(t => t.BadgeName))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(_ => ticket.OrderId)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => ticket.BadgeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => ticket.IdentificationFullName)
+                </td>
+                <td>
+                    <b>@Html.DisplayFor(_ => ticket.PreferredFullName)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => ticket.DateOfBirth)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => ticket.CabinAssignment) @* This is a new string column, we'll populate this manually from Kendra/Nimble's spreadsheet *@
+                </td>
+                <td>
+                    @if (ticket.IsCheckedIn)
+                    {
+                        <form asp-action="UndoCheckInTicket">
+                            <input type="hidden" name="ticketId" value="@ticket.Id" />
+                            <button type="button" class="btn btn-success">Arrived at @Html.DisplayFor(_ => ticket.CheckInTime.Value)</button>
+                            <button type="submit" class="btn btn-warning">Check Out</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="CheckInTicket">
+                            <input type="hidden" name="ticketId" value="@ticket.Id" />
+                            <button type="submit" class="btn btn-danger">Awaiting Check-in</button>
+                        </form>
+                    }
+                    @* This is a button that switches between red ("Awaiting Check-in") and green ("Arrived")*@
+                    @* When checked in, a new column (DateTimeOffset) is populated with the check-in time*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
